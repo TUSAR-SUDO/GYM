@@ -113,6 +113,12 @@
     .hero { min-height:100vh; display:flex; align-items:center; position:relative; overflow:hidden; }
     .hero-bg {
       position:absolute; inset:0;
+    }
+    .hero-bg-video {
+      width:100%; height:100%; object-fit:cover;
+    }
+    .hero-bg-fallback {
+      width:100%; height:100%; object-fit:cover;
       background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600') center/cover;
     }
     .hero-overlay { position:absolute; inset:0; background: rgba(0,0,0,0.65); }
@@ -159,12 +165,66 @@
     .reveal.visible { opacity:1; transform:translateY(0); }
 
     /* ABOUT BENTO */
-    .about-bento { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
-    .about-images { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .about-img { border-radius:8px; overflow:hidden; border:1px solid var(--border); }
-    .about-img img { width:100%; height:200px; object-fit:cover; }
-    .about-img:first-child { grid-column:span 2; }
-    .about-img:first-child img { height:260px; }
+    .about-bento {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px; align-items:start;
+    }
+    .about-images {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:auto auto;
+      gap:16px;
+    }
+    .about-img {
+      border-radius:12px; overflow:hidden;
+      border:1px solid var(--border);
+      position:relative;
+    }
+    .about-img img { width:100%; height:220px; object-fit:cover; display:block; }
+    .about-img.main { grid-column:span 2; }
+    .about-img.main img { height:280px; }
+    .about-img.short img { height:200px; }
+    .about-video {
+      grid-column:span 2; border-radius:12px; overflow:hidden;
+      border:1px solid var(--border); position:relative;
+      background:var(--bg-card); cursor:pointer;
+    }
+    .about-video video { width:100%; height:240px; object-fit:cover; display:block; }
+    .about-video .play-overlay {
+      position:absolute; inset:0; background:rgba(0,0,0,0.35);
+      display:flex; align-items:center; justify-content:center;
+      transition: background 0.3s;
+    }
+    .about-video:hover .play-overlay { background:rgba(0,0,0,0.2); }
+    .about-video .play-btn {
+      width:56px; height:56px; border-radius:50%;
+      background:var(--accent-gradient); display:flex;
+      align-items:center; justify-content:center;
+      box-shadow:0 4px 20px rgba(255,60,0,0.5);
+      transition: transform 0.3s;
+    }
+    .about-video:hover .play-btn { transform:scale(1.1); }
+    .about-video .play-btn::after {
+      content:''; display:block;
+      width:0; height:0;
+      border-top:10px solid transparent;
+      border-bottom:10px solid transparent;
+      border-left:18px solid white;
+      margin-left:4px;
+    }
+    @media (max-width:768px) {
+      .about-img img { height:180px; }
+      .about-img.main img { height:220px; }
+      .about-img.short img { height:180px; }
+      .about-video video { height:200px; }
+    }
+    @media (max-width:480px) {
+      .about-img img { height:150px; }
+      .about-img.main img { height:180px; }
+      .about-img.short img { height:150px; }
+      .about-video video { height:170px; }
+    }
     .about-divider { width:40px; height:3px; background:var(--accent-gradient); margin:24px 0; }
     .about-features { display:flex; flex-direction:column; gap:16px; margin-top:24px; }
     .about-feature { display:flex; align-items:center; gap:12px; font-size:15px; color: var(--text-secondary); }
@@ -331,6 +391,39 @@
       font-size:13px; color: var(--text-secondary); font-style:italic;
     }
     .gallery-item:hover .gallery-caption { opacity:1; }
+
+    /* GALLERY VIDEO PLAY */
+    .gallery-play-overlay {
+      position:absolute; inset:0; background:rgba(0,0,0,0.35);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; transition:opacity 0.3s; cursor:pointer; z-index:1;
+    }
+    .gallery-item:hover .gallery-play-overlay { opacity:1; }
+    .gallery-play-icon {
+      width:48px; height:48px; border-radius:50%;
+      background:var(--accent); display:flex; align-items:center; justify-content:center;
+      font-size:16px; color:white; padding-left:3px;
+      box-shadow:0 2px 16px rgba(255,60,0,0.5);
+      transition:transform 0.3s;
+    }
+    .gallery-item:hover .gallery-play-icon { transform:scale(1.1); }
+
+    /* VIDEO MODAL */
+    .video-modal {
+      position:fixed; inset:0; z-index:2000;
+      background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+      display:flex; align-items:center; justify-content:center;
+      padding:24px; animation:fadeIn 0.3s ease;
+    }
+    .video-modal-inner { position:relative; max-width:900px; width:100%; }
+    .video-modal-close {
+      position:absolute; top:-40px; right:0; background:none; border:none;
+      color:white; font-size:24px; cursor:pointer; z-index:1;
+      width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+      border-radius:50%; transition:background 0.3s;
+    }
+    .video-modal-close:hover { background:rgba(255,255,255,0.1); }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
     /* PRICING */
     .pricing-section { background: var(--bg-secondary); }
@@ -675,43 +768,46 @@
     .ba-slider {
       position:relative; overflow:hidden; border-radius:8px;
       cursor:col-resize; user-select:none; touch-action:none;
+      border:1px solid var(--border);
     }
-    .ba-slider img { width:100%; height:300px; object-fit:cover; display:block; }
-    .ba-after-wrap {
-      position:absolute; top:0; left:0; bottom:0;
-      overflow:hidden; width:50%;
+    .ba-layer {
+      width:100%; height:320px; object-fit:cover; display:block;
     }
-    .ba-after-wrap img {
-      width:100%; min-width:200%; object-fit:cover;
+    .ba-before-clip {
+      position:absolute; inset:0; overflow:hidden; width:50%;
+    }
+    .ba-before-clip img {
+      width:100%; height:100%; object-fit:cover;
       position:absolute; top:0; left:0;
+      /* image stays full-width of the slider, clip-box reveals left portion */
     }
     .ba-divider {
       position:absolute; top:0; bottom:0; width:3px;
-      background:var(--accent); left:50%; transform:translateX(-50%);
-      z-index:2; pointer-events:none;
+      background:var(--accent); z-index:3; pointer-events:none;
+      box-shadow:0 0 8px rgba(255,60,0,0.4);
     }
-    .ba-divider::after {
-      content:''; position:absolute; top:50%; left:50%;
+    .ba-handle {
+      position:absolute; top:50%; z-index:4; pointer-events:none;
       transform:translate(-50%,-50%);
-      width:36px; height:36px; border-radius:50%;
+      width:40px; height:40px; border-radius:50%;
       background:var(--accent); border:3px solid white;
       box-shadow:0 2px 12px rgba(0,0,0,0.5);
+      display:flex; align-items:center; justify-content:center;
     }
-    .ba-divider::before {
-      content:'◄►'; position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%); z-index:3;
-      color:white; font-size:10px; letter-spacing:1px;
+    .ba-handle::after {
+      content:'◄ ►'; color:white; font-size:9px; letter-spacing:1px; font-family:'Inter',sans-serif;
     }
     .ba-label {
-      position:absolute; top:12px; z-index:3;
+      position:absolute; top:12px; z-index:5;
       font-size:11px; font-weight:700; letter-spacing:2px;
       padding:4px 10px; border-radius:3px; color:white;
     }
     .ba-label.before { left:12px; background:rgba(0,0,0,0.6); }
     .ba-label.after { right:12px; background:var(--accent); }
     @media (max-width:480px) {
-      .ba-slider img, .ba-after-wrap img { height:220px; }
-      .ba-divider::after { width:28px; height:28px; }
+      .ba-layer { height:220px; }
+      .ba-handle { width:32px; height:32px; }
+      .ba-handle::after { font-size:8px; }
     }
 
     /* TIER 1 — MAX DIALS */
@@ -788,8 +884,9 @@
       { src: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&q=80', quote: '"Never skip leg day." — Jake T.' },
       { src: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=600&q=80', quote: '"Stronger every session." — Priya S.' },
       { src: 'https://images.unsplash.com/photo-1580261450046-d0a30080dc9b?w=600&q=80', quote: '"Results speak for themselves." — Sofia C.' },
-      { src: 'https://images.unsplash.com/photo-1534368786749-b63e05c90863?w=600&q=80', quote: '"This is my therapy." — Marcus R.' },
+      { type:'video', src:'https://videos.pexels.com/video-files/4761437/4761437-uhd_2560_1440_25fps.mp4', poster:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80', quote:'"Watch the grind." — Marcus R.' },
       { src: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80', quote: '"Discipline over motivation." — Sarah K.' },
+      { type:'video', src:'https://videos.pexels.com/video-files/4761434/4761434-uhd_2560_1440_25fps.mp4', poster:'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=600&q=80', quote:'"Pure energy." — Jake T.' },
       { src: 'https://images.unsplash.com/photo-1470468969717-61d5d54fd036?w=600&q=80', quote: '"No limits here." — David C.' },
       { src: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80', quote: '"Fuel the grind." — Maria S.' }
     ];
@@ -911,36 +1008,43 @@
       const updatePos = (clientX) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
-        const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+        const x = Math.max(2, Math.min(clientX - rect.left, rect.width - 2));
         setPos((x / rect.width) * 100);
       };
 
-      const onPointerDown = (e) => { dragging.current = true; updatePos(e.clientX || e.touches?.[0]?.clientX); };
-      const onPointerMove = (e) => { if (dragging.current) updatePos(e.clientX || e.touches?.[0]?.clientX); };
-      const onPointerUp = () => { dragging.current = false; };
+      const onPointerDown = (e) => {
+        dragging.current = true;
+        updatePos(e.clientX || e.touches?.[0]?.clientX);
+      };
 
       useEffect(() => {
-        const handleMove = (e) => { if (dragging.current) updatePos(e.clientX); };
-        const handleUp = () => { dragging.current = false; };
-        window.addEventListener('mousemove', handleMove);
-        window.addEventListener('mouseup', handleUp);
-        window.addEventListener('touchmove', handleMove, { passive: true });
-        window.addEventListener('touchend', handleUp);
+        const onMove = (e) => {
+          if (!dragging.current) return;
+          const cx = e.clientX || e.touches?.[0]?.clientX;
+          if (cx !== undefined) updatePos(cx);
+        };
+        const onUp = () => { dragging.current = false; };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+        window.addEventListener('touchmove', onMove, { passive: true });
+        window.addEventListener('touchend', onUp);
         return () => {
-          window.removeEventListener('mousemove', handleMove);
-          window.removeEventListener('mouseup', handleUp);
-          window.removeEventListener('touchmove', handleMove);
-          window.removeEventListener('touchend', handleUp);
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+          window.removeEventListener('touchmove', onMove);
+          window.removeEventListener('touchend', onUp);
         };
       }, []);
 
       return (
         <div className="ba-slider" ref={containerRef} onMouseDown={onPointerDown} onTouchStart={onPointerDown}>
-          <img src={afterImg} alt="After" />
-          <div className="ba-after-wrap" style={{ width: pos + '%' }}>
-            <img src={beforeImg} alt="Before" style={{ width: containerRef.current ? containerRef.current.offsetWidth + 'px' : '100%' }} />
+          <img className="ba-layer" src={afterImg} alt="After" draggable="false" />
+          <div className="ba-before-clip" style={{ width: pos + '%' }}>
+            <img className="ba-layer" src={beforeImg} alt="Before" draggable="false"
+              style={{ width: containerRef.current ? containerRef.current.offsetWidth + 'px' : '100%' }} />
           </div>
           <div className="ba-divider" style={{ left: pos + '%' }} />
+          <div className="ba-handle" style={{ left: pos + '%' }} />
           <span className="ba-label before">BEFORE</span>
           <span className="ba-label after">AFTER</span>
         </div>
@@ -1070,7 +1174,11 @@
 
       return (
         <section className="hero">
-          <div className="hero-bg" />
+          <div className="hero-bg">
+            <video className="hero-bg-video" autoPlay muted loop playsInline poster="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600">
+              <source src="https://videos.pexels.com/video-files/4761437/4761437-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+            </video>
+          </div>
           <div className="hero-overlay" />
           <HeroDumbbell />
           <div className="container hero-content">
@@ -1106,13 +1214,27 @@
 
     // ========== ABOUT ==========
     function About() {
+      const videoRef = useRef(null);
+      const [playing, setPlaying] = useState(false);
+      const togglePlay = () => {
+        if (!videoRef.current) return;
+        if (playing) videoRef.current.pause(); else videoRef.current.play();
+        setPlaying(!playing);
+      };
       return (
         <section className="section" id="about">
           <div className="container">
             <div className="about-bento reveal">
               <div className="about-images">
-                <div className="about-img"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800" alt="Gym training" /></div>
-                <div className="about-img"><img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800" alt="Group workout" /></div>
+                <div className="about-img main"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800" alt="Gym training" /></div>
+                <div className="about-img short"><img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800" alt="Group workout" /></div>
+                <div className="about-img short"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800" alt="Cardio session" /></div>
+                <div className="about-video" onClick={togglePlay}>
+                  <video ref={videoRef} muted loop playsInline preload="metadata" poster="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800">
+                    <source src="https://videos.pexels.com/video-files/4761437/4761437-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+                  </video>
+                  <div className="play-overlay"><div className="play-btn" /></div>
+                </div>
               </div>
               <div className="about-text">
                 <div className="section-label">WHO WE ARE</div>
@@ -1324,6 +1446,12 @@
 
     // ========== GALLERY ==========
     function Gallery() {
+      const videoRef = useRef(null);
+      const [activeVideo, setActiveVideo] = useState(null);
+
+      const playVideo = (idx) => setActiveVideo(idx);
+      const closeVideo = () => { setActiveVideo(null); };
+
       return (
         <section className="section" id="gallery-section" style={{ background: 'var(--bg-secondary)' }}>
           <div className="container">
@@ -1341,11 +1469,30 @@
             <div className="gallery-grid">
               {galleryImages.map((img, i) => (
                 <div className="gallery-item reveal" key={i} style={{ transitionDelay: `${(i % 3) * 0.1}s` }}>
-                  <img src={img.src} alt="Gallery" loading="lazy" />
+                  {img.type === 'video' ? (
+                    <>
+                      <img src={img.poster} alt="Video thumbnail" loading="lazy" />
+                      <div className="gallery-play-overlay" onClick={() => playVideo(img.src)}>
+                        <div className="gallery-play-icon">▶</div>
+                      </div>
+                    </>
+                  ) : (
+                    <img src={img.src} alt="Gallery" loading="lazy" />
+                  )}
                   <div className="gallery-caption">{img.quote}</div>
                 </div>
               ))}
             </div>
+            {activeVideo && (
+              <div className="video-modal" onClick={closeVideo}>
+                <div className="video-modal-inner" onClick={e => e.stopPropagation()}>
+                  <button className="video-modal-close" onClick={closeVideo}>✕</button>
+                  <video ref={videoRef} controls autoPlay style={{ width:'100%', maxHeight:'70vh', borderRadius:'8px' }}>
+                    <source src={activeVideo} type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            )}
           </div>
         </section>
       );
