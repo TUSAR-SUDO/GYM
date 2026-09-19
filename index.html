@@ -617,6 +617,139 @@
       .program-card:hover .program-card-bg { transform:none; }
       .program-card:hover .program-card-overlay { background:linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%); }
       .program-card:hover { border-color:var(--border); }
+      .custom-cursor { display:none !important; }
+    }
+
+    /* TIER 1 — GRIP SCROLL BAR */
+    .grip-bar { position:fixed; top:0; left:0; right:0; z-index:1001; height:4px; pointer-events:none; }
+    .grip-bar-fill { height:100%; background:var(--accent-gradient); width:0%; transition: width 0.15s ease-out; }
+    .grip-weight {
+      position:fixed; top:4px; z-index:1001; pointer-events:none;
+      font-family:'Bebas Neue',sans-serif; font-size:13px; color:var(--accent);
+      letter-spacing:2px; opacity:0; transition: opacity 0.3s;
+    }
+    .grip-weight.visible { opacity:1; }
+
+    /* TIER 1 — HERO DUMBBELL */
+    .hero-dumbbell {
+      position:absolute; top:50%; right:8%; transform:translateY(-50%);
+      pointer-events:none; z-index:0; opacity:0.12;
+      transition: transform 0.08s ease-out;
+    }
+    .hero-dumbbell svg { width:220px; height:auto; }
+    .hero-dumbbell .plate { fill:var(--accent); }
+    .hero-dumbbell .bar { fill:#555; }
+    @media (max-width:1024px) {
+      .hero-dumbbell { right:4%; opacity:0.08; }
+      .hero-dumbbell svg { width:160px; }
+    }
+    @media (max-width:768px) {
+      .hero-dumbbell { top:auto; bottom:18%; right:50%; transform:translateX(50%); opacity:0.06; }
+      .hero-dumbbell svg { width:120px; }
+    }
+
+    /* TIER 1 — CHECK-IN TICKER */
+    .checkin-ticker {
+      background:var(--bg-secondary); border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border); padding:14px 0; overflow:hidden;
+    }
+    .checkin-track {
+      display:flex; gap:48px; white-space:nowrap;
+      animation:tickerScroll 35s linear infinite; width:max-content;
+    }
+    .checkin-ticker:hover .checkin-track { animation-play-state:paused; }
+    .checkin-item { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-secondary); }
+    .checkin-avatar { width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); }
+    .checkin-name { color:var(--text-primary); font-weight:600; }
+    .checkin-activity { color:var(--accent); font-weight:500; }
+    .checkin-time { color:var(--text-muted); font-size:11px; }
+    @keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    @media (max-width:768px) {
+      .checkin-ticker { padding:10px 0; }
+      .checkin-track { gap:28px; }
+      .checkin-item { font-size:12px; }
+      .checkin-avatar { width:24px; height:24px; }
+    }
+
+    /* TIER 1 — BEFORE/AFTER SLIDER */
+    .ba-slider {
+      position:relative; overflow:hidden; border-radius:8px;
+      cursor:col-resize; user-select:none; touch-action:none;
+    }
+    .ba-slider img { width:100%; height:300px; object-fit:cover; display:block; }
+    .ba-after-wrap {
+      position:absolute; top:0; left:0; bottom:0;
+      overflow:hidden; width:50%;
+    }
+    .ba-after-wrap img {
+      width:100%; min-width:200%; object-fit:cover;
+      position:absolute; top:0; left:0;
+    }
+    .ba-divider {
+      position:absolute; top:0; bottom:0; width:3px;
+      background:var(--accent); left:50%; transform:translateX(-50%);
+      z-index:2; pointer-events:none;
+    }
+    .ba-divider::after {
+      content:''; position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:36px; height:36px; border-radius:50%;
+      background:var(--accent); border:3px solid white;
+      box-shadow:0 2px 12px rgba(0,0,0,0.5);
+    }
+    .ba-divider::before {
+      content:'◄►'; position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%); z-index:3;
+      color:white; font-size:10px; letter-spacing:1px;
+    }
+    .ba-label {
+      position:absolute; top:12px; z-index:3;
+      font-size:11px; font-weight:700; letter-spacing:2px;
+      padding:4px 10px; border-radius:3px; color:white;
+    }
+    .ba-label.before { left:12px; background:rgba(0,0,0,0.6); }
+    .ba-label.after { right:12px; background:var(--accent); }
+    @media (max-width:480px) {
+      .ba-slider img, .ba-after-wrap img { height:220px; }
+      .ba-divider::after { width:28px; height:28px; }
+    }
+
+    /* TIER 1 — MAX DIALS */
+    .max-dial { display:flex; align-items:center; gap:8px; margin-top:10px; }
+    .max-dial-ring { width:36px; height:36px; }
+    .max-dial-ring circle { fill:none; stroke-width:3; }
+    .max-dial-bg { stroke:var(--border); }
+    .max-dial-fill {
+      stroke:var(--accent); stroke-linecap:round;
+      transition: stroke-dashoffset 1.2s ease;
+      transform:rotate(-90deg); transform-origin:50% 50%;
+    }
+    .max-dial-label { font-size:11px; color:var(--text-muted); }
+    .max-dial-value { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--accent); }
+
+    /* TIER 1 — FILM GRAIN OVERLAY */
+    .grain-overlay {
+      position:fixed; inset:0; z-index:998; pointer-events:none;
+      opacity:0.04; mix-blend-mode:overlay;
+    }
+
+    /* TIER 1 — CUSTOM CURSOR */
+    .custom-cursor {
+      position:fixed; width:24px; height:24px; border:2px solid var(--accent);
+      border-radius:50%; pointer-events:none; z-index:9999;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s, border-color 0.2s;
+      transform:translate(-50%,-50%); mix-blend-mode:difference;
+    }
+    .custom-cursor.hovering {
+      width:48px; height:48px; border-color:var(--accent-secondary);
+      background:rgba(255,60,0,0.08);
+    }
+    .magnetic-btn { transition: transform 0.2s ease; }
+    @media (max-width:768px) {
+      .custom-cursor { display:none !important; }
+    }
+    @media (hover:none) and (pointer:coarse) {
+      .custom-cursor { display:none !important; }
     }
   </style>
 </head>
@@ -679,6 +812,210 @@
       { label: 'Contact', id: 'contact' }
     ];
 
+    const checkins = [
+      { name: 'Marcus', activity: 'Deadlifts — 405×5', time: '2 min ago', avatar: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=100' },
+      { name: 'Priya', activity: 'Finished CrossFit WOD', time: '5 min ago', avatar: 'https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?w=100' },
+      { name: 'Sarah', activity: 'Bench Press — PR 135kg', time: '8 min ago', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100' },
+      { name: 'Jake', activity: 'Boxing Round 12/12', time: '12 min ago', avatar: 'https://images.unsplash.com/photo-1534367610401-9f5ed68180aa?w=100' },
+      { name: 'David', activity: 'HIIT — 680 cal burned', time: '15 min ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100' },
+      { name: 'Sofia', activity: 'Yoga Flow — 60 min', time: '18 min ago', avatar: 'https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=100' },
+      { name: 'Alex', activity: 'Squats — 315×8', time: '22 min ago', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' },
+      { name: 'Maria', activity: 'Kettlebell Swings — 50 reps', time: '25 min ago', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100' },
+      { name: 'James', activity: 'Clean & Jerk — 225kg', time: '28 min ago', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100' },
+      { name: 'Chen', activity: 'Pull-ups — 25 reps', time: '31 min ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100' }
+    ];
+
+    const programMaxes = [
+      { label: 'MAX DL', value: 240, unit: 'kg', pct: 85 },
+      { label: 'MAX BS', value: 200, unit: 'kg', pct: 78 },
+      { label: 'MAX BP', value: 160, unit: 'kg', pct: 72 },
+      { label: 'MAX OHP', value: 110, unit: 'kg', pct: 65 },
+      { label: '5K TIME', value: '21:30', unit: 'min', pct: 88 },
+      { label: 'VO2 MAX', value: 52, unit: 'ml', pct: 82 }
+    ];
+
+    // ========== GRIP STRENGTH SCROLL BAR ==========
+    function GripBar() {
+      const [scrollPct, setScrollPct] = useState(0);
+      const [kg, setKg] = useState(0);
+      useEffect(() => {
+        const handleScroll = () => {
+          const total = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
+          setScrollPct(pct);
+          setKg(Math.round(pct * 8));
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+      return (
+        <>
+          <div className="grip-bar"><div className="grip-bar-fill" style={{ width: scrollPct + '%' }} /></div>
+          <div className={`grip-weight ${scrollPct > 2 ? 'visible' : ''}`} style={{ left: `calc(${scrollPct}% - 40px)`, top: '8px' }}>
+            {kg}kg LIFTED
+          </div>
+        </>
+      );
+    }
+
+    // ========== HERO COUNTER-WEIGHT DUMBBELL ==========
+    function HeroDumbbell() {
+      const ref = useRef(null);
+      useEffect(() => {
+        const handleMove = (e) => {
+          if (!ref.current) return;
+          const x = (e.clientX / window.innerWidth - 0.5) * 16;
+          const y = (e.clientY / window.innerHeight - 0.5) * 10;
+          ref.current.style.transform = `translateY(-50%) rotate(${x}deg) translateY(${y}px)`;
+        };
+        window.addEventListener('mousemove', handleMove);
+        return () => window.removeEventListener('mousemove', handleMove);
+      }, []);
+      return (
+        <div className="hero-dumbbell" ref={ref}>
+          <svg viewBox="0 0 200 80">
+            <rect className="bar" x="30" y="35" width="140" height="10" rx="3" />
+            <rect className="plate" x="10" y="15" width="22" height="50" rx="4" />
+            <rect className="plate" x="168" y="15" width="22" height="50" rx="4" />
+            <rect className="plate" x="22" y="22" width="12" height="36" rx="3" fill="#FF6B35" />
+            <rect className="plate" x="166" y="22" width="12" height="36" rx="3" fill="#FF6B35" />
+          </svg>
+        </div>
+      );
+    }
+
+    // ========== CHECK-IN TICKER ==========
+    function CheckinTicker() {
+      const doubled = [...checkins, ...checkins];
+      return (
+        <div className="checkin-ticker">
+          <div className="checkin-track">
+            {doubled.map((c, i) => (
+              <div className="checkin-item" key={i}>
+                <img className="checkin-avatar" src={c.avatar} alt={c.name} />
+                <span><span className="checkin-name">{c.name}</span> just finished <span className="checkin-activity">{c.activity}</span></span>
+                <span className="checkin-time">{c.time}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ========== BEFORE/AFTER SLIDER ==========
+    function BeforeAfterSlider({ beforeImg, afterImg }) {
+      const containerRef = useRef(null);
+      const [pos, setPos] = useState(50);
+      const dragging = useRef(false);
+
+      const updatePos = (clientX) => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+        setPos((x / rect.width) * 100);
+      };
+
+      const onPointerDown = (e) => { dragging.current = true; updatePos(e.clientX || e.touches?.[0]?.clientX); };
+      const onPointerMove = (e) => { if (dragging.current) updatePos(e.clientX || e.touches?.[0]?.clientX); };
+      const onPointerUp = () => { dragging.current = false; };
+
+      useEffect(() => {
+        const handleMove = (e) => { if (dragging.current) updatePos(e.clientX); };
+        const handleUp = () => { dragging.current = false; };
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleUp);
+        window.addEventListener('touchmove', handleMove, { passive: true });
+        window.addEventListener('touchend', handleUp);
+        return () => {
+          window.removeEventListener('mousemove', handleMove);
+          window.removeEventListener('mouseup', handleUp);
+          window.removeEventListener('touchmove', handleMove);
+          window.removeEventListener('touchend', handleUp);
+        };
+      }, []);
+
+      return (
+        <div className="ba-slider" ref={containerRef} onMouseDown={onPointerDown} onTouchStart={onPointerDown}>
+          <img src={afterImg} alt="After" />
+          <div className="ba-after-wrap" style={{ width: pos + '%' }}>
+            <img src={beforeImg} alt="Before" style={{ width: containerRef.current ? containerRef.current.offsetWidth + 'px' : '100%' }} />
+          </div>
+          <div className="ba-divider" style={{ left: pos + '%' }} />
+          <span className="ba-label before">BEFORE</span>
+          <span className="ba-label after">AFTER</span>
+        </div>
+      );
+    }
+
+    // ========== MAX DIAL ==========
+    function MaxDial({ label, value, unit, pct, delay }) {
+      const ref = useRef(null);
+      const [animate, setAnimate] = useState(false);
+      const circumference = 2 * Math.PI * 15;
+      const offset = circumference - (pct / 100) * circumference;
+
+      useEffect(() => {
+        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setAnimate(true); }, { threshold: 0.5 });
+        if (ref.current) obs.observe(ref.current);
+        return () => obs.disconnect();
+      }, []);
+
+      return (
+        <div className="max-dial" ref={ref}>
+          <svg className="max-dial-ring" viewBox="0 0 36 36">
+            <circle className="max-dial-bg" cx="18" cy="18" r="15" />
+            <circle className="max-dial-fill" cx="18" cy="18" r="15"
+              strokeDasharray={circumference}
+              strokeDashoffset={animate ? offset : circumference}
+              style={{ transitionDelay: delay + 'ms' }}
+            />
+          </svg>
+          <div>
+            <div className="max-dial-label">{label}</div>
+            <div className="max-dial-value">{value}{unit}</div>
+          </div>
+        </div>
+      );
+    }
+
+    // ========== FILM GRAIN ==========
+    function FilmGrain() {
+      return (
+        <svg className="grain-overlay" xmlns="http://www.w3.org/2000/svg">
+          <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /></filter>
+          <rect width="100%" height="100%" filter="url(#grain)" />
+        </svg>
+      );
+    }
+
+    // ========== CUSTOM CURSOR ==========
+    function CustomCursor() {
+      const ref = useRef(null);
+      useEffect(() => {
+        const move = (e) => {
+          if (ref.current) {
+            ref.current.style.left = e.clientX + 'px';
+            ref.current.style.top = e.clientY + 'px';
+          }
+        };
+        const addHover = () => ref.current && ref.current.classList.add('hovering');
+        const removeHover = () => ref.current && ref.current.classList.remove('hovering');
+        window.addEventListener('mousemove', move);
+        document.querySelectorAll('a, button, .program-card, .pricing-card, .gallery-item, .ba-slider').forEach(el => {
+          el.addEventListener('mouseenter', addHover);
+          el.addEventListener('mouseleave', removeHover);
+        });
+        return () => {
+          window.removeEventListener('mousemove', move);
+          document.querySelectorAll('a, button, .program-card, .pricing-card, .gallery-item, .ba-slider').forEach(el => {
+            el.removeEventListener('mouseenter', addHover);
+            el.removeEventListener('mouseleave', removeHover);
+          });
+        };
+      }, []);
+      return <div className="custom-cursor" ref={ref} />;
+    }
+
     // ========== NAVBAR ==========
     function Navbar({ activePage, setActivePage }) {
       const [scrolled, setScrolled] = useState(false);
@@ -735,6 +1072,7 @@
         <section className="hero">
           <div className="hero-bg" />
           <div className="hero-overlay" />
+          <HeroDumbbell />
           <div className="container hero-content">
             <div className={`hero-animate ${visible ? 'visible' : ''}`} style={{ transitionDelay: '0.2s' }}>
               <div className="hero-eyebrow">EST. 2015 — FORGE YOUR LIMITS</div>
@@ -821,6 +1159,9 @@
                   <div className="program-card-content">
                     <div className="program-card-name">{p.name}</div>
                     <div className="program-card-desc">{p.desc}</div>
+                    <div style={{ display:'flex', gap:'12px', marginTop:'8px' }}>
+                      <MaxDial label={programMaxes[i]?.label} value={programMaxes[i]?.value} unit={programMaxes[i]?.unit} pct={programMaxes[i]?.pct} delay={i * 150} />
+                    </div>
                     <div className="program-card-link">View Program →</div>
                   </div>
                 </div>
@@ -990,6 +1331,12 @@
               <div className="section-label" style={{ textAlign: 'center' }}>TRANSFORMATIONS</div>
               <h2 className="section-title">REAL PEOPLE. REAL RESULTS.</h2>
               <p className="section-subtitle" style={{ margin: '0 auto' }}>Every image tells a story of dedication, sweat, and transformation.</p>
+            </div>
+            <div className="reveal" style={{ marginBottom:'32px' }}>
+              <BeforeAfterSlider
+                beforeImg="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&q=80"
+                afterImg="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=600&q=80"
+              />
             </div>
             <div className="gallery-grid">
               {galleryImages.map((img, i) => (
@@ -1259,10 +1606,14 @@
 
       return (
         <>
+          <GripBar />
+          <FilmGrain />
+          <CustomCursor />
           <Navbar activePage={activePage} setActivePage={setActivePage} />
           {activePage === 'home' && (
             <>
               <Hero setActivePage={setActivePage} />
+              <CheckinTicker />
               <About />
               <Programs setActivePage={setActivePage} />
               <Trainers />
